@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Calendar</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .calendar-header {
+      font-size: 1.5em;
+      margin: 10px 0;
+    }
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      width: 90%;
+      max-width: 600px;
+    }
+    .day {
+      border: 1px solid #ddd;
+      padding: 10px;
+      min-height: 100px;
+      position: relative;
+      cursor: pointer;
+    }
+    .day h3 {
+      margin: 0;
+    }
+    .event {
+      background-color: #cfe3ff;
+      margin: 5px 0;
+      padding: 3px;
+      cursor: pointer;
+    }
+    .selected-day {
+      border: 2px solid #007bff;
+      background-color: #eaf4ff;
+    }
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      width: 90%;
+      max-width: 600px;
+      margin: 10px 0;
+    }
+
+    /* Popup Modal Styling */
+    #eventModal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1000;
+      background-color: white;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      text-align: center;
+      width: 300px;
+    }
+    #modalOverlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+    .add-event {
+      padding: 5px;
+      width: 90%;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Interactive Calendar</h1>
+  <div class="calendar-header" id="calendarHeader"></div>
+  <div class="controls">
+    <button onclick="prevMonth()">Previous Month</button>
+    <button onclick="nextMonth()">Next Month</button>
+  </div>
+  <div class="calendar" id="calendar"></div>
+
+  <!-- Overlay for Popup Modal -->
+  <div id="modalOverlay" onclick="closeModal()"></div>
+
+  <!-- Popup Modal for adding events -->
+  <div id="eventModal">
+    <h2>Add Event</h2>
+    <input type="text" id="eventTitle" placeholder="Event title" class="add-event"/>
+    <button onclick="addEvent()">Add</button>
+    <button onclick="closeModal()">Cancel</button>
+  </div>
+
+  <script>
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    let events = {}; // Store events in an object
+    let currentMonth = new Date().getMonth();
+    let currentYear = new Date().getFullYear();
+
+    const calendar = document.getElementById('calendar');
+    const calendarHeader = document.getElementById('calendarHeader');
+    const eventModal = document.getElementById('eventModal');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const eventTitleInput = document.getElementById('eventTitle');
+    let selectedDate = null;
+    let selectedDayElement = null;
+
+    function createCalendar(month, year) {
+      calendar.innerHTML = '';
+      calendarHeader.textContent = `${monthNames[month]} ${year}`;
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      for (let i = 0; i < firstDay; i++) {
+        calendar.appendChild(document.createElement('div'));
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dayDiv = document.createElement('div');
+        dayDiv.classList.add('day');
+        dayDiv.innerHTML = `<h3>${day}</h3>`;
+
+        const dateKey = `${year}-${month + 1}-${day}`;
+        dayDiv.addEventListener('click', () => selectDay(dayDiv, dateKey));
+
+        if (events[dateKey]) {
+          events[dateKey].forEach(event => {
+            const eventDiv = document.createElement('div');
+            eventDiv.classList.add('event');
+            eventDiv.innerText = event;
+            eventDiv.addEventListener('click', (e) => {
+              e.stopPropagation();
+              deleteEvent(dateKey, event);
+            });
+            dayDiv.appendChild(eventDiv);
+          });
+        }
+
+        calendar.appendChild(dayDiv);
+      }
+    }
+
+    function selectDay(dayElement, date) {
+      if (selectedDayElement) {
+        selectedDayElement.classList.remove('selected-day');
+      }
+      selectedDayElement = dayElement;
+      selectedDayElement.classList.add('selected-day');
+      selectedDate = date;
+      openModal();
+    }
+
+    function openModal() {
+      modalOverlay.style.display = 'block';
+      eventModal.style.display = 'block';
+      eventTitleInput.focus();
+    }
+
+    function closeModal() {
+      modalOverlay.style.display = 'none';
+      eventModal.style.display = 'none';
+      eventTitleInput.value = '';
+    }
+
+    function addEvent() {
+      const title = eventTitleInput.value;
+      if (title) {
+        if (!events[selectedDate]) events[selectedDate] = [];
+        events[selectedDate].push(title);
+        createCalendar(currentMonth, currentYear);
+        closeModal();
+      }
+    }
+
+    function deleteEvent(date, event) {
+      events[date] = events[date].filter(e => e !== event);
+      if (events[date].length === 0) delete events[date];
+      createCalendar(currentMonth, currentYear);
+    }
+
+    function prevMonth() {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      createCalendar(currentMonth, currentYear);
+    }
+
+    function nextMonth() {
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      createCalendar(currentMonth, currentYear);
+    }
+
+    createCalendar(currentMonth, currentYear);
+  </script>
+</body>
+</html>
