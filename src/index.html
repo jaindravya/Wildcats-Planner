@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Interactive Calendar</title>
+  <title>Interactive Calendar with Event Categories</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -33,11 +33,14 @@
       margin: 0;
     }
     .event {
-      background-color: #cfe3ff;
       margin: 5px 0;
       padding: 3px;
       cursor: pointer;
+      border-radius: 3px;
     }
+    .event.work { background-color: #cfe3ff; }
+    .event.personal { background-color: #ffddc1; }
+    .event.important { background-color: #ffb3b3; }
     .selected-day {
       border: 2px solid #007bff;
       background-color: #eaf4ff;
@@ -48,6 +51,13 @@
       width: 90%;
       max-width: 600px;
       margin: 10px 0;
+    }
+
+    /* Filter and Search Controls */
+    .filter-controls, .search-controls {
+      margin: 10px 0;
+      display: flex;
+      gap: 10px;
     }
 
     /* Popup Modal Styling */
@@ -80,15 +90,33 @@
       width: 90%;
       margin-bottom: 10px;
     }
+    .category-select {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 5px;
+    }
   </style>
 </head>
 <body>
-  <h1>Interactive Calendar</h1>
+  <h1>Interactive Calendar with Event Categories</h1>
   <div class="calendar-header" id="calendarHeader"></div>
   <div class="controls">
     <button onclick="prevMonth()">Previous Month</button>
     <button onclick="nextMonth()">Next Month</button>
   </div>
+
+  <!-- Filter Controls for Event Categories -->
+  <div class="filter-controls">
+    <label><input type="checkbox" value="work" checked onchange="updateFilters()"> Work</label>
+    <label><input type="checkbox" value="personal" checked onchange="updateFilters()"> Personal</label>
+    <label><input type="checkbox" value="important" checked onchange="updateFilters()"> Important</label>
+  </div>
+
+  <!-- Search Bar for Events -->
+  <div class="search-controls">
+    <input type="text" id="searchBar" placeholder="Search events" oninput="updateFilters()" style="width: 90%; padding: 5px;">
+  </div>
+
   <div class="calendar" id="calendar"></div>
 
   <!-- Overlay for Popup Modal -->
@@ -98,6 +126,11 @@
   <div id="eventModal">
     <h2>Add Event</h2>
     <input type="text" id="eventTitle" placeholder="Event title" class="add-event"/>
+    <select id="eventCategory" class="category-select">
+      <option value="work">Work</option>
+      <option value="personal">Personal</option>
+      <option value="important">Important</option>
+    </select>
     <button onclick="addEvent()">Add</button>
     <button onclick="closeModal()">Cancel</button>
   </div>
@@ -110,12 +143,15 @@
     let events = {}; // Store events in an object
     let currentMonth = new Date().getMonth();
     let currentYear = new Date().getFullYear();
+    let selectedCategories = new Set(['work', 'personal', 'important']); // Initially all categories are selected
 
     const calendar = document.getElementById('calendar');
     const calendarHeader = document.getElementById('calendarHeader');
     const eventModal = document.getElementById('eventModal');
     const modalOverlay = document.getElementById('modalOverlay');
     const eventTitleInput = document.getElementById('eventTitle');
+    const eventCategoryInput = document.getElementById('eventCategory');
+    const searchBar = document.getElementById('searchBar');
     let selectedDate = null;
     let selectedDayElement = null;
 
@@ -139,16 +175,21 @@
         dayDiv.addEventListener('click', () => selectDay(dayDiv, dateKey));
 
         if (events[dateKey]) {
-          events[dateKey].forEach(event => {
-            const eventDiv = document.createElement('div');
-            eventDiv.classList.add('event');
-            eventDiv.innerText = event;
-            eventDiv.addEventListener('click', (e) => {
-              e.stopPropagation();
-              deleteEvent(dateKey, event);
+          events[dateKey]
+            .filter(({ title, category }) => 
+              selectedCategories.has(category) &&
+              title.toLowerCase().includes(searchBar.value.toLowerCase())
+            )
+            .forEach(({ title, category }) => {
+              const eventDiv = document.createElement('div');
+              eventDiv.classList.add('event', category);
+              eventDiv.innerText = title;
+              eventDiv.addEventListener('click', (e) => {
+                e.stopPropagation();
+                deleteEvent(dateKey, title);
+              });
+              dayDiv.appendChild(eventDiv);
             });
-            dayDiv.appendChild(eventDiv);
-          });
         }
 
         calendar.appendChild(dayDiv);
@@ -175,21 +216,33 @@
       modalOverlay.style.display = 'none';
       eventModal.style.display = 'none';
       eventTitleInput.value = '';
+      eventCategoryInput.value = 'work';
     }
 
     function addEvent() {
       const title = eventTitleInput.value;
+      const category = eventCategoryInput.value;
       if (title) {
         if (!events[selectedDate]) events[selectedDate] = [];
-        events[selectedDate].push(title);
+        events[selectedDate].push({ title, category });
         createCalendar(currentMonth, currentYear);
         closeModal();
       }
     }
 
-    function deleteEvent(date, event) {
-      events[date] = events[date].filter(e => e !== event);
+    function deleteEvent(date, title) {
+      events[date] = events[date].filter(event => event.title !== title);
       if (events[date].length === 0) delete events[date];
+      createCalendar(currentMonth, currentYear);
+    }
+
+    function updateFilters() {
+      selectedCategories.clear();
+      document.querySelectorAll('.filter-controls input[type="checkbox"]').forEach(checkbox => {
+        if (checkbox.checked) {
+          selectedCategories.add(checkbox.value);
+        }
+      });
       createCalendar(currentMonth, currentYear);
     }
 
