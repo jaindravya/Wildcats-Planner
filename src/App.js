@@ -1,21 +1,19 @@
 import './App.css';
 
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Calendar from './calendar';
 import Planner from './planner';
 
 function App() {
   return (
     <Router>
-      <div id="wrapper">
-        <div id="content">
           <main>
-            <Switch>
-              <Route exact path="/" component={Planner} />
-              <Route path="/calendar" component={Calendar} />
-            </Switch>
+            <Routes>
+              <Route exact path="/" element={<Planner />} />
+              <Route path="/calendar" element={<Calendar />} />
+            </Routes>
           </main>
-        </div>
-      </div>
     </Router>
   );
 }
