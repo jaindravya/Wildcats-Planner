@@ -58,23 +58,18 @@ class Planner extends Component {
     return (
       <div>
         <main>
-          <div>
+          <div className="title">
               <h1>Planner</h1>
           </div>
+          <ul className="time">
             <li>
               <span className="text">
                 <h3>{this.state.currentDateTime}</h3>
-              </span>
-            </li>
-            <li>
-              <span className="text">
                 <h3>{this.state.dayOfWeek}</h3>
               </span>
             </li>
-          <div class="order">
-            <div class="head">
-              <h3>To-do</h3>
-            </div>
+          </ul>
+          <div class="list">
             <table>
               <thead>
                 <tr>

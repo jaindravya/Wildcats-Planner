@@ -8,12 +8,14 @@ import Planner from './planner';
 function App() {
   return (
     <Router>
+        <div id = "content">
           <main>
             <Routes>
               <Route exact path="/" element={<Planner />} />
               <Route path="/calendar" element={<Calendar />} />
             </Routes>
           </main>
+        </div>
     </Router>
   );
 }

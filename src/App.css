@@ -1,38 +1,76 @@
-.App {
-  text-align: center;
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+:root {
+	--light: #F9F9F9;
+	--grey: #eee;
+	--dark-grey: #AAAAAA;
+	--green: #00D40C;
+
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+#content main {
+	width: 100%;
+	padding: 36px 36px;
+	max-height: calc(100vh - 56px);
+	overflow-y: auto;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+#content main .title h1 {
+	font-size: 56px;
+	font-weight: 200;
 }
 
-.App-link {
-  color: #61dafb;
+#content main .time li {
+	padding: 12px;
+	display: flex;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+#content main .time li .text h3 {
+	font-size: 30px;
+	font-weight: 100;
+}
+
+#content main .list {
+	display: flex;
+	flex-wrap: wrap;
+	margin-top: 36px;
+}
+
+#content main .list table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+#content main .list table th {
+	padding-bottom: 16px;
+	font-size: 18px;
+	text-align: left;
+	border-bottom: 1px solid var(--grey);
+}
+#content main .list table td {
+	padding: 20px 0;
+}
+
+#content main .list table tbody tr:hover {
+	background: var(--grey);
+}
+
+#content main .list table tr td .status {
+	font-size: 12px;
+  width: 100px;
+	padding: 10px 16px;
+	color: var(--light);
+	border-radius: 8px;
+	font-weight: 500;
+}
+
+#content main .list table tr td .status.completed {
+	background: var(--green);
+}
+#content main .list table tr td .status.pending {
+	background: var(--dark-grey);
 }
