@@ -12,8 +12,14 @@ const Calendar = () => {
 
   const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
   const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-
   const daysInMonth = Array.from({ length: endOfMonth.getDate() }, (_, i) => i + 1);
+
+  // Color mapping for each category
+  const categoryColors = {
+    Personal: "#f8c8dc", // Pastel Pink
+    Work: "#c8e8f8",     // Pastel Blue
+    Other: "#f8e8c8"     // Pastel Yellow
+  };
 
   const handlePrevMonth = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
@@ -70,7 +76,6 @@ const Calendar = () => {
           <option value="Other">Other</option>
         </select>
 
-
         <label>Search Events: </label>
         <input
           type="text"
@@ -93,7 +98,10 @@ const Calendar = () => {
               {filteredEvents(date).length > 0 && (
                 <ul className="event-list">
                   {filteredEvents(date).map((event, index) => (
-                    <li key={index}>
+                    <li
+                      key={index}
+                      style={{ backgroundColor: categoryColors[event.category] }}
+                    >
                       {event.name}
                     </li>
                   ))}
@@ -109,7 +117,10 @@ const Calendar = () => {
           <h3>Events for {selectedDate}</h3>
           <ul>
             {filteredEvents(selectedDate).map((event, index) => (
-              <li key={index}>
+              <li
+                key={index}
+                style={{ backgroundColor: categoryColors[event.category] }}
+              >
                 {event.name} <span className="category">({event.category})</span>
                 <button className="delete-btn" onClick={() => handleDeleteEvent(index)}>
                   ✖
