@@ -1,23 +1,28 @@
-import './App.css';
+// src/App.js
+import React, { useState } from "react";
+import Calendar from "./Calendar";
+import Planner from "./planner";
+import "./App.css";
 
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Calendar from './Calendar';
-import Planner from './planner';
+const App = () => {
+  const [showCalendar, setShowCalendar] = useState(true);
 
-function App() {
+  const toggleView = () => {
+    setShowCalendar(!showCalendar);
+  };
+
   return (
-    <Router>
-        <div id = "content">
-          <main>
-            <Routes>
-              <Route exact path="/" element={<Planner />} />
-              <Route path="/calendar" element={<Calendar />} />
-            </Routes>
-          </main>
-        </div>
-    </Router>
+    <div className="app-container">
+      <header className="app-header">
+        <h1>Event Management</h1>
+        <button onClick={toggleView}>
+          {showCalendar ? "Switch to Planner" : "Switch to Calendar"}
+        </button>
+      </header>
+
+      <main>{showCalendar ? <Calendar /> : <Planner />}</main>
+    </div>
   );
-}
+};
 
 export default App;
