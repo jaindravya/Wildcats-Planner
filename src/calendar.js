@@ -6,6 +6,9 @@ const Calendar = () => {
   const [events, setEvents] = useState({});
   const [selectedDate, setSelectedDate] = useState(null);
   const [newEvent, setNewEvent] = useState("");
+  const [newCategory, setNewCategory] = useState("Personal");
+  const [filterCategory, setFilterCategory] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
   const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
@@ -26,9 +29,10 @@ const Calendar = () => {
 
   const handleAddEvent = () => {
     if (newEvent.trim() === "") return;
+    const eventObj = { name: newEvent, category: newCategory };
     setEvents({
       ...events,
-      [selectedDate]: [...(events[selectedDate] || []), newEvent],
+      [selectedDate]: [...(events[selectedDate] || []), eventObj],
     });
     setNewEvent("");
   };
@@ -36,6 +40,15 @@ const Calendar = () => {
   const handleDeleteEvent = (eventIndex) => {
     const updatedEvents = events[selectedDate].filter((_, index) => index !== eventIndex);
     setEvents({ ...events, [selectedDate]: updatedEvents });
+  };
+
+  const filteredEvents = (date) => {
+    const eventList = events[date] || [];
+    return eventList.filter((event) => {
+      const matchesCategory = filterCategory ? event.category === filterCategory : true;
+      const matchesSearch = event.name.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
   };
 
   return (
@@ -48,6 +61,25 @@ const Calendar = () => {
         <button onClick={handleNextMonth}>{">"}</button>
       </header>
 
+      <div className="filter-container">
+        <label>Filter by Category: </label>
+        <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
+          <option value="">All</option>
+          <option value="Personal">Personal</option>
+          <option value="Work">Work</option>
+          <option value="Other">Other</option>
+        </select>
+
+
+        <label>Search Events: </label>
+        <input
+          type="text"
+          placeholder="Search by event name"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
+
       <div className="calendar-grid">
         {daysInMonth.map((day) => {
           const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day).toISOString().split("T")[0];
@@ -58,11 +90,11 @@ const Calendar = () => {
               onClick={() => handleDateClick(date)}
             >
               <span>{day}</span>
-              {events[date] && (
+              {filteredEvents(date).length > 0 && (
                 <ul className="event-list">
-                  {events[date].map((event, index) => (
+                  {filteredEvents(date).map((event, index) => (
                     <li key={index}>
-                      {event}
+                      {event.name}
                     </li>
                   ))}
                 </ul>
@@ -76,9 +108,9 @@ const Calendar = () => {
         <div className="event-form">
           <h3>Events for {selectedDate}</h3>
           <ul>
-            {(events[selectedDate] || []).map((event, index) => (
+            {filteredEvents(selectedDate).map((event, index) => (
               <li key={index}>
-                {event}
+                {event.name} <span className="category">({event.category})</span>
                 <button className="delete-btn" onClick={() => handleDeleteEvent(index)}>
                   ✖
                 </button>
@@ -91,6 +123,11 @@ const Calendar = () => {
             value={newEvent}
             onChange={(e) => setNewEvent(e.target.value)}
           />
+          <select value={newCategory} onChange={(e) => setNewCategory(e.target.value)}>
+            <option value="Personal">Personal</option>
+            <option value="Work">Work</option>
+            <option value="Other">Other</option>
+          </select>
           <button onClick={handleAddEvent}>Add Event</button>
         </div>
       )}
