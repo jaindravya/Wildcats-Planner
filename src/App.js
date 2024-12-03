@@ -1,6 +1,6 @@
 // src/App.js
 import React, { useState } from "react";
-import Calendar from "./Calendar";
+import Calendar from "./calendar";
 import Planner from "./planner";
 import "./App.css";
 
