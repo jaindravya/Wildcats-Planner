@@ -1,4 +1,3 @@
-// src/Calendar.js
 import React, { useState } from "react";
 import "./Calendar.css";
 
@@ -34,6 +33,11 @@ const Calendar = () => {
     setNewEvent("");
   };
 
+  const handleDeleteEvent = (eventIndex) => {
+    const updatedEvents = events[selectedDate].filter((_, index) => index !== eventIndex);
+    setEvents({ ...events, [selectedDate]: updatedEvents });
+  };
+
   return (
     <div className="calendar-container">
       <header className="calendar-header">
@@ -57,7 +61,9 @@ const Calendar = () => {
               {events[date] && (
                 <ul className="event-list">
                   {events[date].map((event, index) => (
-                    <li key={index}>{event}</li>
+                    <li key={index}>
+                      {event}
+                    </li>
                   ))}
                 </ul>
               )}
@@ -71,7 +77,12 @@ const Calendar = () => {
           <h3>Events for {selectedDate}</h3>
           <ul>
             {(events[selectedDate] || []).map((event, index) => (
-              <li key={index}>{event}</li>
+              <li key={index}>
+                {event}
+                <button className="delete-btn" onClick={() => handleDeleteEvent(index)}>
+                  ✖
+                </button>
+              </li>
             ))}
           </ul>
           <input
