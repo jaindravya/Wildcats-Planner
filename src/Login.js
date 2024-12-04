@@ -50,7 +50,7 @@ function Login({ setShowLogin, onLoginSuccess }) {
                         <FaLock className="icon" />
                         <input
                             type="password"
-                            placeholder="Password"
+                            placeholder="Enter password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
