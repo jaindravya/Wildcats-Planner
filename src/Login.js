@@ -40,7 +40,7 @@ function Login({ setShowLogin, onLoginSuccess }) {
                         <FaUser className="icon" />
                         <input
                             type="email"
-                            placeholder="Email"
+                            placeholder="Enter email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
