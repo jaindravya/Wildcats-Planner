@@ -37,6 +37,12 @@ function Register({ setShowLogin, onLoginSuccess }) {
 
     return (
         <div className="register-container">
+            <img
+                 src="/cat-peek.png"
+                 alt="Planner-themed cat 2"
+                 className="cat-image"
+            />
+
             <div className="register-box">
                 <h2>Register</h2>
                 <form onSubmit={handleSubmit}>

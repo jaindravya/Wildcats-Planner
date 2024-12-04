@@ -6,7 +6,7 @@
     margin: 0;
     font-family: "Arial", sans-serif;
     height: 100vh;
-    background: linear-gradient(to bottom, #2e026e, #ff84e6);
+    background: linear-gradient(to bottom, #e16ebb, #593c92);
     color: white;
     display: flex;
     justify-content: center;
@@ -111,13 +111,22 @@
     text-decoration: underline;
 }
 
-.cat-image {
+.cat-image-login {
     width: 250px; 
     position: absolute; 
     top: 75%; 
     left: 900px; 
     transform: translateY(-50%);
     z-index: 1;
+}
+
+.paw-planner-image {
+    width: 300px; /* Make it small */
+    position: absolute; 
+    top: 11.5%; 
+    left: 40%; 
+    transform: translateY(-50%);
+    z-index: 1
 }
 
 .switch-button {

@@ -31,11 +31,15 @@ function Login({ setShowLogin, onLoginSuccess }) {
 
     return (
         <div className="login-container">
-            {/* Add the cat image here */}
             <img
                 src="/cat-peek.png"
                 alt="Planner-themed cat"
-                className="cat-image"
+                className="cat-image-login"
+            />
+            <img
+                src="/paw-planner.png"
+                alt="PawPlanner logo"
+                className="paw-planner-image"
             />
             <div className="login-box">
                 <h2>Login</h2>
