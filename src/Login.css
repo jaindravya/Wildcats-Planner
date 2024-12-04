@@ -1,0 +1,125 @@
+/* Background Styling */
+body {
+    margin: 0;
+    font-family: "Arial", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to bottom, #2e026e, #ff84e6);
+    color: white;
+}
+
+/* Login Container */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+/* Login Box */
+.login-box {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 15px;
+    padding: 2rem;
+    width: 400px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.login-box h2 {
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    color: white;
+}
+
+/* Input Fields */
+.input-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 1rem;
+}
+
+.input-container .icon {
+    font-size: 1.2rem;
+    color: white;
+    margin-right: 0.5rem;
+}
+
+.input-container input {
+    background: none;
+    border: none;
+    color: white;
+    width: 100%;
+    font-size: 1rem;
+    outline: none;
+}
+
+/* Extra Options */
+.extra-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.extra-options a {
+    color: #ff84e6;
+    text-decoration: none;
+}
+
+.extra-options a:hover {
+    text-decoration: underline;
+}
+
+/* Login Button */
+.login-button {
+    background: #ff84e6;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    border-radius: 25px;
+    padding: 0.5rem 2rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.login-button:hover {
+    background: #f062d9;
+}
+
+/* Register Link */
+.login-box p {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+.login-box p a {
+    color: #ff84e6;
+    text-decoration: none;
+}
+
+.login-box p a:hover {
+    text-decoration: underline;
+}
+
+.switch-button {
+    background: none;
+    border: none;
+    color: #ff84e6;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.switch-button:hover {
+    color: #f062d9;
+}
+
