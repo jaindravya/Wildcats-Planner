@@ -1,17 +1,13 @@
 /* Background Styling */
-body {
-    margin: 0;
-    font-family: "Arial", sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: linear-gradient(to bottom, #2e026e, #ff84e6);
-    color: white;
-}
+
 
 /* Login Container */
 .login-container {
+    margin: 0;
+    font-family: "Arial", sans-serif;
+    height: 100vh;
+    background: linear-gradient(to bottom, #2e026e, #ff84e6);
+    color: white;
     display: flex;
     justify-content: center;
     align-items: center;
