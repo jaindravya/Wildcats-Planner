@@ -1,28 +1,60 @@
-// src/App.js
+// frontend/src/components/App.js
 import React, { useState } from "react";
 import Calendar from "./calendar";
 import Planner from "./planner";
+import Login from "./Login";
+import Register from "./Register";
 import "./App.css";
 
 const App = () => {
-  const [showCalendar, setShowCalendar] = useState(true);
+    const [showCalendar, setShowCalendar] = useState(true);
+    const [isLoggedIn, setIsLoggedIn] = useState(
+        localStorage.getItem("token") ? true : false
+    );
+    const [showLogin, setShowLogin] = useState(true);
 
-  const toggleView = () => {
-    setShowCalendar(!showCalendar);
-  };
+    const toggleView = () => {
+        setShowCalendar(!showCalendar);
+    };
 
-  return (
-    <div className="app-container">
-      <header className="app-header">
-        <h1>Event Management</h1>
-        <button onClick={toggleView}>
-          {showCalendar ? "Switch to Planner" : "Switch to Calendar"}
-        </button>
-      </header>
+    const handleLoginSuccess = (token) => {
+        localStorage.setItem("token", token);
+        setIsLoggedIn(true);
+    };
 
-      <main>{showCalendar ? <Calendar /> : <Planner />}</main>
-    </div>
-  );
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        setIsLoggedIn(false);
+    };
+
+    if (!isLoggedIn) {
+        return (
+            <div className="App">
+                {showLogin ? (
+                    <Login setShowLogin={setShowLogin} onLoginSuccess={handleLoginSuccess} />
+                ) : (
+                    <Register
+                        setShowLogin={setShowLogin}
+                        onLoginSuccess={handleLoginSuccess}
+                    />
+                )}
+            </div>
+        );
+    }
+
+    return (
+        <div className="app-container">
+            <header className="app-header">
+                <h1>Event Management</h1>
+                <button onClick={toggleView}>
+                    {showCalendar ? "Switch to Planner" : "Switch to Calendar"}
+                </button>
+                <button onClick={handleLogout}>Logout</button>
+            </header>
+
+            <main>{showCalendar ? <Calendar /> : <Planner />}</main>
+        </div>
+    );
 };
 
 export default App;

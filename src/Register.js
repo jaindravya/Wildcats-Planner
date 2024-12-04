@@ -1,7 +1,8 @@
+// frontend/src/components/Register.js
 import React, { useState } from "react";
 import "./Register.css";
 
-function Register({ setShowLogin }) {
+function Register({ setShowLogin, onLoginSuccess }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -13,15 +14,18 @@ function Register({ setShowLogin }) {
             return;
         }
         try {
-            const response = await fetch("http://localhost:5000/register", {
+            const response = await fetch("http://localhost:5000/users/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
             });
             const data = await response.json();
-            if (data.status === "ok") {
+            if (response.ok) {
                 alert("Registration successful!");
-                setShowLogin(true); // Navigate back to login on successful registration
+                // Optionally, log in the user automatically
+                // onLoginSuccess(data.token);
+                // Or redirect to login page
+                setShowLogin(true);
             } else {
                 alert(data.error || "Registration failed!");
             }
@@ -38,7 +42,7 @@ function Register({ setShowLogin }) {
                 <form onSubmit={handleSubmit}>
                     <div className="input-container">
                         <input
-                            type="text"
+                            type="email"
                             placeholder="Email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -63,7 +67,9 @@ function Register({ setShowLogin }) {
                             required
                         />
                     </div>
-                    <button type="submit" className="register-button">Register</button>
+                    <button type="submit" className="register-button">
+                        Register
+                    </button>
                 </form>
                 <p>
                     Already have an account?{" "}

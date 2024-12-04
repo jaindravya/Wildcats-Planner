@@ -1,3 +1,6 @@
+// index.js
+require('dotenv').config(); // Load environment variables
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -8,8 +11,9 @@ const todoRoutes = require('./routes/todoRoutes');
 const calendarRoutes = require('./routes/calendarRoutes');
 
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000; // Use environment variable for port
 
+// Middleware
 app.use(bodyParser.json());
 app.use(cors());
 
@@ -17,7 +21,6 @@ app.use(cors());
 app.use('/users', userRoutes);
 app.use('/todos', todoRoutes);
 app.use('/calendar', calendarRoutes);
-
 
 // Start the server
 connectToDB().then(() => {

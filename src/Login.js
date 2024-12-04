@@ -1,14 +1,34 @@
+// frontend/src/components/Login.js
 import React, { useState } from "react";
 import { FaUser, FaLock } from "react-icons/fa";
 import "./Login.css";
 
-function Login({ setShowLogin }) {
+function Login({ setShowLogin, onLoginSuccess }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Login Submitted", { email, password });
+        try {
+            const response = await fetch("http://localhost:5000/users/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                // Save the token and notify App.js
+                onLoginSuccess(data.token);
+            } else {
+                alert(data.error || "Login failed!");
+            }
+        } catch (error) {
+            console.error("Error during login:", error);
+            alert("An error occurred during login.");
+        }
     };
 
     return (
@@ -19,7 +39,7 @@ function Login({ setShowLogin }) {
                     <div className="input-container">
                         <FaUser className="icon" />
                         <input
-                            type="text"
+                            type="email"
                             placeholder="Email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -42,7 +62,9 @@ function Login({ setShowLogin }) {
                         </label>
                         <a href="#">Forgot password?</a>
                     </div>
-                    <button type="submit" className="login-button">Login</button>
+                    <button type="submit" className="login-button">
+                        Login
+                    </button>
                 </form>
                 <p>
                     Don’t have an account?{" "}

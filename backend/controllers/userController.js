@@ -1,37 +1,64 @@
-const User = require('../models/userModel');
-const bcrypt = require('bcrypt');
+// controllers/userController.js
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
-exports.registerUser = async (req, res) => {
+exports.register = async (req, res) => {
+  const { email, password } = req.body;
+
   try {
-    const { username, password } = req.body;
+    // Check if the user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res
+          .status(400)
+          .json({ status: 'error', error: 'Email already exists' });
+    }
 
-    // Hash password
+    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create user
-    const newUser = new User({ username, password: hashedPassword });
-    await newUser.save();
+    // Create and save the new user
+    const user = new User({ email, password: hashedPassword });
+    await user.save();
 
-    res.status(201).json({ message: 'User registered successfully' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.json({ status: 'ok', message: 'User registered successfully' });
+  } catch (err) {
+    console.error('Error during registration:', err);
+    res.status(500).json({ status: 'error', error: 'Internal server error' });
   }
 };
 
-exports.loginUser = async (req, res) => {
+exports.login = async (req, res) => {
+  const { email, password } = req.body;
+
   try {
-    const { username, password } = req.body;
+    // Find the user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+          .status(404)
+          .json({ status: 'error', error: 'User not found' });
+    }
 
-    // Find user
-    const user = await User.findOne({ username });
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    // Compare the provided password with the hashed password in the database
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res
+          .status(401)
+          .json({ status: 'error', error: 'Invalid password' });
+    }
 
-    // Verify password
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
+    // Generate a JWT token
+    const token = jwt.sign(
+        { email: user.email, id: user._id },
+        process.env.JWT_SECRET,
+        { expiresIn: '1h' }
+    );
 
-    res.status(200).json({ message: 'Login successful', userId: user._id });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.json({ status: 'ok', token });
+  } catch (err) {
+    console.error('Error during login:', err);
+    res.status(500).json({ status: 'error', error: 'Login failed' });
   }
 };
