@@ -43,7 +43,7 @@ function Register({ setShowLogin, onLoginSuccess }) {
                     <div className="input-container">
                         <input
                             type="email"
-                            placeholder="Email"
+                            placeholder="Enter email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -52,7 +52,7 @@ function Register({ setShowLogin, onLoginSuccess }) {
                     <div className="input-container">
                         <input
                             type="password"
-                            placeholder="Password"
+                            placeholder="Enter password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required

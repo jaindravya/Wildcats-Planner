@@ -103,12 +103,21 @@
 }
 
 .login-box p a {
-    color: #ff84e6;
+    color: white;
     text-decoration: none;
 }
 
 .login-box p a:hover {
     text-decoration: underline;
+}
+
+.cat-image {
+    width: 250px; 
+    position: absolute; 
+    top: 75%; 
+    left: 900px; 
+    transform: translateY(-50%);
+    z-index: 1;
 }
 
 .switch-button {
