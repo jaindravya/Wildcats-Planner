@@ -14,7 +14,7 @@ function Register({ setShowLogin, onLoginSuccess }) {
             return;
         }
         try {
-            const response = await fetch("http://localhost:5000/users/register", {
+            const response = await fetch("http://localhost:5001/users/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
