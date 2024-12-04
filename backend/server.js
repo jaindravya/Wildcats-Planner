@@ -1,8 +1,6 @@
-// index.js
 require('dotenv').config(); // Load environment variables
 
 const express = require('express');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 const connectToDB = require('./db');
 
@@ -11,11 +9,17 @@ const todoRoutes = require('./routes/todoRoutes');
 const calendarRoutes = require('./routes/calendarRoutes');
 
 const app = express();
-const port = process.env.PORT || 5000; // Use environment variable for port
+const port = process.env.PORT || 5001;
+
+// CORS Configuration
+app.use(cors({
+  origin: 'http://localhost:3000', // Allow requests from React frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Specify allowed methods
+  credentials: true, // Allow credentials like cookies
+}));
 
 // Middleware
-app.use(bodyParser.json());
-app.use(cors());
+app.use(express.json()); // Built-in JSON body parser
 
 // Routes
 app.use('/users', userRoutes);

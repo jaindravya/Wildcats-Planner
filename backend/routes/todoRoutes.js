@@ -1,5 +1,5 @@
 const express = require('express');
-const { getTodos, addTodo } = require('../controllers/todoController');
+const { getTodos, addTodo, updateTodo, deleteTodo } = require('../controllers/todoController');
 const router = express.Router();
 
 router.get('/:userId', getTodos);      
