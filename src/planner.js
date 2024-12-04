@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './planner.css';
 
 class Planner extends Component {
   constructor() {
@@ -7,18 +8,11 @@ class Planner extends Component {
       currentDateTime: '',
       dayOfWeek: '',
       tasks: [
-        {
-          name: 'Task 1',
-          date: '11-20-2024',
-          status: 'pending',
-        },
-        {
-          name: 'Task 2',
-          date: '11-19-2024',
-          status: 'completed',
-        },
-
+        { name: 'Task 1', date: '11-20-2024', status: 'pending' },
+        { name: 'Task 2', date: '11-19-2024', status: 'completed' },
       ],
+      newTaskName: '', 
+      newTaskDate: '', 
     };
   }
 
@@ -47,6 +41,33 @@ class Planner extends Component {
     this.setState({ tasks: updatedTasks });
   };
 
+  addTask = () => {
+    const { newTaskName, newTaskDate, tasks } = this.state;
+    
+    if (newTaskName.trim() === '' || newTaskDate.trim() === '') {
+      alert('please enter a task name and date!');
+      return;
+    }
+  
+    const newTask = {
+      name: newTaskName,
+      date: newTaskDate,
+      status: 'pending',
+    };
+  
+    this.setState({
+      tasks: [...tasks, newTask],
+      newTaskName: '',
+      newTaskDate: '',
+    });
+  };
+
+  deleteTask = (index) => {
+    const { tasks } = this.state;
+    const updatedTasks = tasks.filter((_, taskIndex) => taskIndex !== index);
+    this.setState({ tasks: updatedTasks });
+  };
+
   componentDidMount() {
     this.updateDateTime();
     this.updateDayOfWeek();
@@ -55,51 +76,78 @@ class Planner extends Component {
   }
 
   render() {
+    const { currentDateTime, dayOfWeek, tasks, newTaskName, newTaskDate } = this.state;
+  
     return (
-      <div>
+      <div className="planner-container">
         <main>
           <div className="title">
-              <h1>Planner</h1>
+            <h1>Planner</h1>
           </div>
           <ul className="time">
             <li>
               <span className="text">
-                <h3>{this.state.currentDateTime}</h3>
-                <h3>{this.state.dayOfWeek}</h3>
+                <h3>{currentDateTime}</h3>
+                <h3>{dayOfWeek}</h3>
               </span>
             </li>
           </ul>
-          <div class="list">
+          <div className="list">
             <table>
               <thead>
                 <tr>
                   <th>Task</th>
                   <th>Date</th>
                   <th>Status</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
-              {this.state.tasks.map((task, index) => (
-                      <tr key={index}>
-                        <td>{task.name}</td>
-                        <td>{task.date}</td>
-                        <td>
-                          <button
-                            className={`status ${task.status}`}
-                            onClick={() => this.toggleTaskStatus(index)}
-                          >
-                            {task.status === 'completed' ? 'Completed' : 'Pending'}
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
+                {tasks.map((task, index) => (
+                  <tr key={index}>
+                    <td>{task.name}</td>
+                    <td>{task.date}</td>
+                    <td>
+                      <button
+                        className={`status ${task.status}`}
+                        onClick={() => this.toggleTaskStatus(index)}
+                      >
+                        {task.status === 'completed' ? 'Completed' : 'Pending'}
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        onClick={() => this.deleteTask(index)}
+                        className="delete-cross"
+                        aria-label="Delete Task"
+                      >
+                        &times;
+                      </button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
+          </div>
+          <div className="add-task">
+            <input
+              type="text"
+              placeholder="Task name"
+              value={newTaskName}
+              onChange={(e) => this.setState({ newTaskName: e.target.value })}
+            />
+            <input
+              type="date"
+              value={newTaskDate}
+              onChange={(e) => this.setState({ newTaskDate: e.target.value })}
+            />
+            <button onClick={this.addTask} className="add-button">Add Task</button>
           </div>
         </main>
       </div>
     );
   }
+  
 }
 
 export default Planner;
