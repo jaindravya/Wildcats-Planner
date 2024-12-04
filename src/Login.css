@@ -61,6 +61,11 @@ body {
     outline: none;
 }
 
+.input-container input::placeholder {
+    color: white; 
+    opacity: 0.7;   
+} 
+
 /* Extra Options */
 .extra-options {
     display: flex;
