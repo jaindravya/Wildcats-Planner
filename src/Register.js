@@ -42,6 +42,11 @@ function Register({ setShowLogin, onLoginSuccess }) {
                  alt="Planner-themed cat 2"
                  className="cat-image"
             />
+            <img
+                src="/paw-planner.png"
+                alt="PawPlanner logo"
+                className="paw-planner-image-reg"
+            />
 
             <div className="register-box">
                 <h2>Register</h2>

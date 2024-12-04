@@ -50,6 +50,15 @@
     z-index: 1;
 }
 
+
+.paw-planner-image-reg {
+    width: 250px; 
+    position: absolute; 
+    top: 11.5%; 
+    left: 42%; 
+    transform: translateY(-50%);
+    z-index: 1
+}
 .input-container input {
     background: none;
     border: none;
