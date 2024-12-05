@@ -13,6 +13,8 @@ class Planner extends Component {
       ],
       newTaskName: '', 
       newTaskDate: '', 
+      filterStatus: '', 
+      searchQuery: '',   
     };
   }
 
@@ -92,9 +94,40 @@ class Planner extends Component {
               </span>
             </li>
           </ul>
-          <div className="list">
+          {/* filter/search */}
+          <div className="filter-container">
+  <div className="filter-group">
+  <label htmlFor="status-filter" style={{ fontFamily: 'cursive' }}>
+  Filter by Status:
+</label>
+    <select
+      id="status-filter"
+      value={this.state.filterStatus}
+      onChange={(e) => this.setState({ filterStatus: e.target.value })}
+    >
+      <option value="">All</option>
+      <option value="pending">Pending</option>
+      <option value="completed">Completed</option>
+    </select>
+  </div>
+
+  <div className="filter-group">
+  <label htmlFor="task-search" style={{ fontFamily: 'cursive' }}>
+  Search Tasks:
+</label>
+    <input
+      id="task-search"
+      type="text"
+      placeholder="Search by task name"
+      value={this.state.searchQuery}
+      onChange={(e) => this.setState({ searchQuery: e.target.value })}
+    />
+  </div>
+</div>
+
+          <div className="list"> 
             <table>
-              <thead>
+              <thead> 
                 <tr>
                   <th>Task</th>
                   <th>Date</th>
@@ -103,30 +136,41 @@ class Planner extends Component {
                 </tr>
               </thead>
               <tbody>
-                {tasks.map((task, index) => (
-                  <tr key={index}>
-                    <td>{task.name}</td>
-                    <td>{task.date}</td>
-                    <td>
-                      <button
-                        className={`status ${task.status}`}
-                        onClick={() => this.toggleTaskStatus(index)}
-                      >
-                        {task.status === 'completed' ? 'Completed' : 'Pending'}
-                      </button>
-                    </td>
-                    <td>
-                      <button
-                        onClick={() => this.deleteTask(index)}
-                        className="delete-cross"
-                        aria-label="Delete Task"
-                      >
-                        &times;
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+  {tasks
+    .filter((task) => {
+      const matchesStatus = this.state.filterStatus // NEW: Filter logic
+        ? task.status === this.state.filterStatus
+        : true;
+      const matchesSearch = task.name // NEW: Search logic
+        .toLowerCase()
+        .includes(this.state.searchQuery.toLowerCase());
+      return matchesStatus && matchesSearch;
+    })
+    .map((task, index) => (
+      <tr key={index}>
+        <td>{task.name}</td>
+        <td>{task.date}</td>
+        <td>
+          <button
+            className={`status ${task.status}`}
+            onClick={() => this.toggleTaskStatus(index)}
+          >
+            {task.status === 'completed' ? 'Completed' : 'Pending'}
+          </button>
+        </td>
+        <td>
+          <button
+            onClick={() => this.deleteTask(index)}
+            className="delete-cross"
+            aria-label="Delete Task"
+          >
+            &times;
+          </button>
+        </td>
+      </tr>
+    ))}
+</tbody>
+
             </table>
           </div>
           <div className="add-task">

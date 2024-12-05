@@ -44,8 +44,13 @@ const App = () => {
 
     return (
         <div className="app-container">
-            <header className="app-header">
-                <h1>PAW PLANNER</h1>
+            <img
+                src="/paw-planner.png"
+                alt="PawPlanner logo"
+                className="paw-planner-image-inside"
+            />
+             <header className="app-header">
+                <h1></h1> 
                 <button onClick={toggleView}>
                     {showCalendar ? "Switch to Planner" : "Switch to Calendar"}
                 </button>

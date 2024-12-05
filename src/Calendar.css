@@ -52,7 +52,7 @@ body {
 }
 
 .calendar-day.selected {
-  background-color: #007bff;
+  background-color: #3384db;
   color: white;
 }
 
