@@ -18,6 +18,95 @@ class Planner extends Component {
     };
   }
 
+  // Fetch tasks from the backend
+  fetchTasks = async () => {
+    try {
+      const response = await fetch('http://localhost:5001/tasks');
+      const tasks = await response.json();
+      this.setState({ tasks });
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+    }
+  };
+
+  // Add a new task
+  addTask = async () => {
+    const { newTaskName, newTaskDate } = this.state;
+    if (!newTaskName || !newTaskDate) {
+      alert('Please provide both task name and date!');
+      return;
+    }
+
+    const newTask = {
+      name: newTaskName,
+      date: newTaskDate,
+      status: 'pending',
+    };
+
+    try {
+      const response = await fetch('http://localhost:5001/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newTask),
+      });
+      if (response.ok) {
+        const addedTask = await response.json();
+        this.setState((prevState) => ({
+          tasks: [...prevState.tasks, addedTask],
+          newTaskName: '',
+          newTaskDate: '',
+        }));
+      }
+    } catch (error) {
+      console.error('Error adding task:', error);
+    }
+  };
+
+  // Toggle task status between 'completed' and 'pending'
+  toggleTaskStatus = async (index) => {
+    const task = this.state.tasks[index];
+    const updatedStatus = task.status === 'completed' ? 'pending' : 'completed';
+
+    try {
+      const response = await fetch(`http://localhost:5001/tasks/${task._id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: updatedStatus }),
+      });
+
+      if (response.ok) {
+        this.setState((prevState) => {
+          const updatedTasks = [...prevState.tasks];
+          updatedTasks[index].status = updatedStatus;
+          return { tasks: updatedTasks };
+        });
+      }
+    } catch (error) {
+      console.error('Error updating task status:', error);
+    }
+  };
+
+  // Delete a task
+  deleteTask = async (index) => {
+    const task = this.state.tasks[index];
+
+    try {
+      const response = await fetch(`http://localhost:5001/tasks/${task._id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        this.setState((prevState) => {
+          const updatedTasks = prevState.tasks.filter((_, i) => i !== index);
+          return { tasks: updatedTasks };
+        });
+      }
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
+  };
+
+  // Get current date and time
   getCurrentDateTime = () => {
     const now = new Date();
     return now.toLocaleString();
@@ -28,49 +117,17 @@ class Planner extends Component {
     this.setState({ currentDateTime });
   };
 
+  // Get the current day of the week
   updateDayOfWeek = () => {
     const currentDate = new Date();
-    const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const dayOfWeekIndex = currentDate.getDay();
     const dayOfWeek = weekdays[dayOfWeekIndex];
     this.setState({ dayOfWeek });
   };
 
-  toggleTaskStatus = (index) => {
-    const updatedTasks = [...this.state.tasks];
-    updatedTasks[index].status =
-      updatedTasks[index].status === 'completed' ? 'pending' : 'completed';
-    this.setState({ tasks: updatedTasks });
-  };
-
-  addTask = () => {
-    const { newTaskName, newTaskDate, tasks } = this.state;
-    
-    if (newTaskName.trim() === '' || newTaskDate.trim() === '') {
-      alert('Please enter a task name and date!');
-      return;
-    }
-  
-    const newTask = {
-      name: newTaskName,
-      date: newTaskDate,
-      status: 'pending',
-    };
-  
-    this.setState({
-      tasks: [...tasks, newTask],
-      newTaskName: '',
-      newTaskDate: '',
-    });
-  };
-
-  deleteTask = (index) => {
-    const { tasks } = this.state;
-    const updatedTasks = tasks.filter((_, taskIndex) => taskIndex !== index);
-    this.setState({ tasks: updatedTasks });
-  };
-
   componentDidMount() {
+    this.fetchTasks();
     this.updateDateTime();
     this.updateDayOfWeek();
     setInterval(this.updateDateTime, 1000);
@@ -79,7 +136,7 @@ class Planner extends Component {
 
   render() {
     const { currentDateTime, dayOfWeek, tasks, newTaskName, newTaskDate } = this.state;
-  
+
     return (
       <div className="planner-container">
         <main>
@@ -185,13 +242,14 @@ class Planner extends Component {
               value={newTaskDate}
               onChange={(e) => this.setState({ newTaskDate: e.target.value })}
             />
-            <button onClick={this.addTask} className="add-button">Add Task</button>
+            <button onClick={this.addTask} className="add-button">
+              Add Task
+            </button>
           </div>
         </main>
       </div>
     );
   }
-  
 }
 
 export default Planner;
