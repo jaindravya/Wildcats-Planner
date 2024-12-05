@@ -45,7 +45,7 @@ class Planner extends Component {
     const { newTaskName, newTaskDate, tasks } = this.state;
     
     if (newTaskName.trim() === '' || newTaskDate.trim() === '') {
-      alert('please enter a task name and date!');
+      alert('Please enter a task name and date!');
       return;
     }
   

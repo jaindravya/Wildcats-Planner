@@ -1,17 +1,12 @@
 /* Background Styling */
-body {
-    margin: 0;
-    font-family: "Arial", sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: linear-gradient(to bottom, #4a148c, #3f51b5, #1a237e); /* Updated Indigo Gradient */
-    color: white;
-}
 
 /* Register Container */
 .register-container {
+    margin: 0;
+    font-family: "Arial", sans-serif;
+    height: 100vh;
+    background: linear-gradient(to bottom, #63007c, #6879da, #0a104e); /* Updated Indigo Gradient */
+    color: white;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -46,6 +41,24 @@ body {
     padding: 0.5rem 1rem;
 }
 
+.cat-image {
+    width: 200px; 
+    position: absolute; 
+    top: 75%; 
+    left: 900px; 
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+
+.paw-planner-image-reg {
+    width: 250px; 
+    position: absolute; 
+    top: 11.5%; 
+    left: 42%; 
+    transform: translateY(-50%);
+    z-index: 1
+}
 .input-container input {
     background: none;
     border: none;

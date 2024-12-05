@@ -1,17 +1,15 @@
 /* Background Styling */
-body {
-    margin: 0;
-    font-family: "Arial", sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: linear-gradient(to bottom, #2e026e, #ff84e6);
-    color: white;
-}
+
 
 /* Login Container */
 .login-container {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    height: 100vh;
+    background: linear-gradient(to bottom, #e16ebb, #593c92);
+    color: white;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -112,7 +110,11 @@ body {
 }
 
 .login-box p a {
+<<<<<<< HEAD
     color: #ffffff;
+=======
+    color: white;
+>>>>>>> d64ec4bee27969f01cd5ae25528295fafc6021bb
     text-decoration: none;
     font-weight: bold;
 }
@@ -121,7 +123,29 @@ body {
     text-decoration: underline;
 }
 
+<<<<<<< HEAD
 /* Switch Button */
+=======
+.cat-image-login {
+    width: 250px; 
+    position: absolute; 
+    top: 75%; 
+    left: 900px; 
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.paw-planner-image {
+    width: 300px; 
+    position: absolute; 
+    top: 11.5%; 
+    left: 41%; 
+    transform: translateY(-50%); 
+   
+    z-index: 1
+}
+
+>>>>>>> d64ec4bee27969f01cd5ae25528295fafc6021bb
 .switch-button {
     background: none;
     border: none;

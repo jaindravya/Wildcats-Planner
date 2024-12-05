@@ -37,13 +37,24 @@ function Register({ setShowLogin, onLoginSuccess }) {
 
     return (
         <div className="register-container">
+            <img
+                 src="/cat-peek.png"
+                 alt="Planner-themed cat 2"
+                 className="cat-image"
+            />
+            <img
+                src="/paw-planner.png"
+                alt="PawPlanner logo"
+                className="paw-planner-image-reg"
+            />
+
             <div className="register-box">
                 <h2>Register</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="input-container">
                         <input
                             type="email"
-                            placeholder="Email"
+                            placeholder="Enter email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -52,7 +63,7 @@ function Register({ setShowLogin, onLoginSuccess }) {
                     <div className="input-container">
                         <input
                             type="password"
-                            placeholder="Password"
+                            placeholder="Enter password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required

@@ -27,7 +27,7 @@ const App = () => {
         setIsLoggedIn(false);
     };
 
-    if (!isLoggedIn) {
+   if (!isLoggedIn) {
         return (
             <div className="App">
                 {showLogin ? (
@@ -40,12 +40,12 @@ const App = () => {
                 )}
             </div>
         );
-    }
+    } 
 
     return (
         <div className="app-container">
             <header className="app-header">
-                <h1>Event Management</h1>
+                <h1>PAW PLANNER</h1>
                 <button onClick={toggleView}>
                     {showCalendar ? "Switch to Planner" : "Switch to Calendar"}
                 </button>

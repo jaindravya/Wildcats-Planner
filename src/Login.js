@@ -1,4 +1,3 @@
-// frontend/src/components/Login.js
 import React, { useState } from "react";
 import { FaUser, FaLock } from "react-icons/fa";
 import "./Login.css";
@@ -20,7 +19,6 @@ function Login({ setShowLogin, onLoginSuccess }) {
 
             const data = await response.json();
             if (response.ok) {
-                // Save the token and notify App.js
                 onLoginSuccess(data.token);
             } else {
                 alert(data.error || "Login failed!");
@@ -33,6 +31,16 @@ function Login({ setShowLogin, onLoginSuccess }) {
 
     return (
         <div className="login-container">
+            <img
+                src="/cat-peek.png"
+                alt="Planner-themed cat"
+                className="cat-image-login"
+            />
+            <img
+                src="/paw-planner.png"
+                alt="PawPlanner logo"
+                className="paw-planner-image"
+            />
             <div className="login-box">
                 <h2>Login</h2>
                 <form onSubmit={handleSubmit}>
@@ -40,7 +48,7 @@ function Login({ setShowLogin, onLoginSuccess }) {
                         <FaUser className="icon" />
                         <input
                             type="email"
-                            placeholder="Email"
+                            placeholder="Enter email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
