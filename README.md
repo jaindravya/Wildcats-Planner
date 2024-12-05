@@ -2,7 +2,8 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-##To run the website succesfully
+##
+To run the website succesfully
 install all dependencies using 'npm install'
 install cors using 'npm install cors'
 go to backend directory, start the server using 'node server.js'
