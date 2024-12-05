@@ -17,7 +17,7 @@ const Calendar = () => {
   // Color mapping for each category
   const categoryColors = {
     Personal: "#c188d1", // Pastel Pink
-    Work: "##89aae2",     // Pastel Blue
+    Work: "#61b4e1",     // Pastel Blue
     Other: "#f8e8c8"     // Pastel Yellow
   };
 
