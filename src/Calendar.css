@@ -1,7 +1,9 @@
 /* src/Calendar.css */
 body {
   background-color: #b4d6f4; /* Change this color to whatever you prefer */
-  font-family: Arial, sans-serif; /* Optional: change font-family */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif; /* Optional: change font-family */
 }
 
 .filter-container {
