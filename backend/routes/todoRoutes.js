@@ -27,22 +27,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
-    try {
-      const task = await Task.findById(req.params.id);
-      if (!task) {
-        return res.status(404).json({ message: 'Task not found' });
-      }
-  
-      task.status = req.body.status || task.status;
-      const updatedTask = await task.save();
-      res.json(updatedTask);
-    } catch (err) {
-      res.status(500).json({ message: err.message });
-    }
-  });
-  
-
 // PATCH (update) a task
 router.patch('/:id', async (req, res) => {
   try {

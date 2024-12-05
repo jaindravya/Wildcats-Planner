@@ -23,7 +23,7 @@ app.use(express.json()); // Built-in JSON body parser
 
 // Routes
 app.use('/users', userRoutes);
-app.use('/todos', todoRoutes);
+app.use('/tasks', todoRoutes);
 app.use('/calendar', calendarRoutes);
 
 // Start the server
