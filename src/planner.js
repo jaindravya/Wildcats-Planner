@@ -8,8 +8,8 @@ class Planner extends Component {
       currentDateTime: '',
       dayOfWeek: '',
       tasks: [
-        { name: 'Task 1', date: '11-20-2024', status: 'pending' },
-        { name: 'Task 2', date: '11-19-2024', status: 'completed' },
+        // { name: 'Task 1', date: '11-20-2024', status: 'pending' },
+        // { name: 'Task 2', date: '11-19-2024', status: 'completed' },
       ],
       newTaskName: '', 
       newTaskDate: '', 

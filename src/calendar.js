@@ -50,8 +50,8 @@ const Calendar = () => {
   
     const event = {
       name: newEvent,
-      category: newCategory,
       date: selectedDate, // Use the selected date
+      category: newCategory,
     };
   
     try {
@@ -87,6 +87,40 @@ const Calendar = () => {
   };
   
 
+  //weekdays
+  const getWeekdays = (date_string) => {
+    const weekdaysSunday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const weekdaysMonday = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const weekdaysTuesday = ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday'];
+    const weekdaysWednesday = ['Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Tuesday'];
+    const weekdaysThursday = ['Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday'];
+    const weekdaysFriday = ['Friday', 'Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
+    const weekdaysSaturday = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    const match_date = date_string.toLocaleDateString('en-US', { weekday: 'long' });
+
+    if (match_date === weekdaysSunday[0]) {
+      return weekdaysSunday;
+    }
+    if (match_date === weekdaysMonday[0]) {
+      return weekdaysMonday;
+    }
+    if (match_date === weekdaysTuesday[0]) {
+      return weekdaysTuesday;
+    }
+    if (match_date === weekdaysWednesday[0]) {
+      return weekdaysWednesday;
+    }
+    if (match_date === weekdaysThursday[0]) {
+      return weekdaysThursday;
+    }
+    if (match_date === weekdaysFriday[0]) {
+      return weekdaysFriday;
+    }
+    if (match_date === weekdaysSaturday[0]) {
+      return weekdaysSaturday;
+    }
+  };
+  
   // Delete an event
   const handleDeleteEvent = async (eventIndex) => {
     const event = events[selectedDate][eventIndex];
@@ -118,6 +152,7 @@ const Calendar = () => {
     });
   };
 
+
   return (
     <div className="calendar-container">
       <header className="calendar-header">
@@ -142,6 +177,14 @@ const Calendar = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
+      </div>
+
+      <div className="weekdays">
+        {getWeekdays(new Date(currentDate.getFullYear(), currentDate.getMonth(), 1)).map((day, index) => (
+          <span className="weekday" key={index}>
+            {day}
+          </span>
+        ))}
       </div>
 
       <div className="calendar-grid">

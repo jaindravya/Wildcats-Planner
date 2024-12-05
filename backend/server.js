@@ -14,7 +14,7 @@ const port = process.env.PORT || 5001;
 // CORS Configuration
 app.use(cors({
   origin: 'http://localhost:3000', // Allow requests from React frontend
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Specify allowed methods
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], // Specify allowed methods
   credentials: true, // Allow credentials like cookies
 }));
 

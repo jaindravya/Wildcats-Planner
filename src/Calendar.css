@@ -97,3 +97,15 @@ body {
   font-size: 16px;
   cursor: pointer;
 }
+
+
+.weekdays {
+  display: flex;
+  justify-content: space-around;
+  padding: 3px;
+}
+
+.weekday {
+  font-weight: bold;
+  padding: 2px;
+}
