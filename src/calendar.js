@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Calendar.css";
 
 const Calendar = () => {
@@ -21,33 +21,94 @@ const Calendar = () => {
     Other: "#bae1ff"     // Pastel blue
   };
 
-  const handlePrevMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
+  // Fetch events when component mounts
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch("http://localhost:5001/events"); // Adjust your API endpoint here
+        const data = await response.json();
+        const eventsByDate = data.reduce((acc, event) => {
+          const date = event.date.split("T")[0]; // Assuming event date is in ISO string format
+          if (!acc[date]) acc[date] = [];
+          acc[date].push(event);
+          return acc;
+        }, {});
+        setEvents(eventsByDate);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
+    };
+    fetchEvents();
+  }, []);
+
+  // Add a new event
+  const handleAddEvent = async () => {
+    if (!newEvent) {
+      alert("Please enter an event name!");
+      return;
+    }
+  
+    const event = {
+      name: newEvent,
+      category: newCategory,
+      date: selectedDate, // Use the selected date
+    };
+  
+    try {
+      // 1. Update state optimistically by adding the new event immediately
+      setEvents((prevEvents) => {
+        const updatedEvents = { ...prevEvents };
+        if (!updatedEvents[selectedDate]) {
+          updatedEvents[selectedDate] = [];
+        }
+        updatedEvents[selectedDate].push(event); // Add the new event
+        return updatedEvents;
+      });
+  
+      // 2. Send the event to the backend (Optional: Only if you want to persist it)
+      const response = await fetch("http://localhost:5001/events", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(event),
+      });
+  
+      if (!response.ok) {
+        console.error("Error adding event to the server");
+      }
+  
+      // 3. Clear input fields
+      setNewEvent("");
+      setNewCategory("Personal");
+    } catch (error) {
+      console.error("Error adding event:", error);
+    }
+  };
+  
+
+  // Delete an event
+  const handleDeleteEvent = async (eventIndex) => {
+    const event = events[selectedDate][eventIndex];
+    try {
+      const response = await fetch(`http://localhost:5001/events/${event._id}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        setEvents((prevEvents) => {
+          const updatedEvents = { ...prevEvents };
+          updatedEvents[selectedDate] = updatedEvents[selectedDate].filter(
+            (_, index) => index !== eventIndex
+          );
+          return updatedEvents;
+        });
+      }
+    } catch (error) {
+      console.error("Error deleting event:", error);
+    }
   };
 
-  const handleNextMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
-  };
-
-  const handleDateClick = (date) => {
-    setSelectedDate(date);
-  };
-
-  const handleAddEvent = () => {
-    if (newEvent.trim() === "") return;
-    const eventObj = { name: newEvent, category: newCategory };
-    setEvents({
-      ...events,
-      [selectedDate]: [...(events[selectedDate] || []), eventObj],
-    });
-    setNewEvent("");
-  };
-
-  const handleDeleteEvent = (eventIndex) => {
-    const updatedEvents = events[selectedDate].filter((_, index) => index !== eventIndex);
-    setEvents({ ...events, [selectedDate]: updatedEvents });
-  };
-
+  // Filter events based on category and search query
   const filteredEvents = (date) => {
     const eventList = events[date] || [];
     return eventList.filter((event) => {
@@ -60,22 +121,19 @@ const Calendar = () => {
   return (
     <div className="calendar-container">
       <header className="calendar-header">
-        <button onClick={handlePrevMonth}>{"<"}</button>
-        <h2>
-          {currentDate.toLocaleString("default", { month: "long" })} {currentDate.getFullYear()}
-        </h2>
-        <button onClick={handleNextMonth}>{">"}</button>
+        <button onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1))}>{"<"}</button>
+        <h2>{currentDate.toLocaleString("default", { month: "long" })} {currentDate.getFullYear()}</h2>
+        <button onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1))}>{">"}</button>
       </header>
 
       <div className="filter-container">
-      <label style={{ fontFamily: 'cursive' }}>Filter by category: </label>
+        <label style={{ fontFamily: 'cursive' }}>Filter by category: </label>
         <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
           <option value="">All</option>
           <option value="Personal">Personal</option>
           <option value="Work">Work</option>
           <option value="Other">Other</option>
         </select>
-
 
         <label style={{ fontFamily: 'cursive' }}>Search Events: </label>
         <input
@@ -93,7 +151,7 @@ const Calendar = () => {
             <div
               key={day}
               className={`calendar-day ${selectedDate === date ? "selected" : ""}`}
-              onClick={() => handleDateClick(date)}
+              onClick={() => setSelectedDate(date)}
             >
               <span>{day}</span>
               {filteredEvents(date).length > 0 && (

@@ -24,7 +24,7 @@ app.use(express.json()); // Built-in JSON body parser
 // Routes
 app.use('/users', userRoutes);
 app.use('/tasks', todoRoutes);
-app.use('/calendar', calendarRoutes);
+app.use('/events', calendarRoutes);
 
 // Start the server
 connectToDB().then(() => {
