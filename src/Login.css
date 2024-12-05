@@ -110,42 +110,33 @@
 }
 
 .login-box p a {
-<<<<<<< HEAD
-    color: #ffffff;
-=======
-    color: white;
->>>>>>> d64ec4bee27969f01cd5ae25528295fafc6021bb
-    text-decoration: none;
+color: white;
+text-decoration: none;
     font-weight: bold;
 }
 
 .login-box p a:hover {
     text-decoration: underline;
 }
-
-<<<<<<< HEAD
 /* Switch Button */
-=======
 .cat-image-login {
-    width: 250px; 
-    position: absolute; 
-    top: 75%; 
-    left: 900px; 
+    width: 250px;
+    position: absolute;
+    top: 75%;
+    left: 900px;
     transform: translateY(-50%);
     z-index: 1;
 }
 
 .paw-planner-image {
-    width: 300px; 
-    position: absolute; 
-    top: 11.5%; 
-    left: 41%; 
-    transform: translateY(-50%); 
-   
+    width: 300px;
+    position: absolute;
+    top: 11.5%;
+    left: 41%;
+    transform: translateY(-50%);
+
     z-index: 1
 }
-
->>>>>>> d64ec4bee27969f01cd5ae25528295fafc6021bb
 .switch-button {
     background: none;
     border: none;
