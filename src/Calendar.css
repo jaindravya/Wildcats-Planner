@@ -40,7 +40,7 @@ body {
 }
 
 .calendar-day {
-  padding: 20px; /* Increase the padding */
+  padding: 30px; /* Increase the padding */
   border: 1px solid #ddd;
   border-radius: 4px;
   cursor: pointer;
