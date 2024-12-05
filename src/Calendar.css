@@ -1,6 +1,6 @@
 /* src/Calendar.css */
 body {
-  background-color: #0d6dc1; /* Change this color to whatever you prefer */
+  background-color: #b4d6f4; /* Change this color to whatever you prefer */
   font-family: Arial, sans-serif; /* Optional: change font-family */
 }
 
@@ -40,11 +40,12 @@ body {
 }
 
 .calendar-day {
-  padding: 10px;
+  padding: 20px; /* Increase the padding */
   border: 1px solid #ddd;
   border-radius: 4px;
   cursor: pointer;
   background-color: white;
+  font-size: 1em; /* Increase font size for days */
 }
 
 .calendar-day.selected {
