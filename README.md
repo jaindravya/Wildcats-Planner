@@ -1,15 +1,31 @@
-# Getting Started with Create React App
+# Paw Planner
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Welcome to Paw Planner! Combine your tasks and events all in one place with the help of this planner. Be sure to read the guided instructions below.
 
-##
-To run the website succesfully
-install all dependencies using 'npm install'
-install cors using 'npm install cors'
-go to backend directory, start the server using 'node server.js'
-in seperate terminal use 'npm start' to launch the app
+## Directions
+To run the website successfully:
 
+In the project directory, install all dependencies using:
 
+### `npm install`
+
+Then install cors using:
+
+### `npm install cors`
+
+Go to the backend directory:
+
+### `cd backend`
+
+Start the server by using:
+
+### `node server.js`
+
+Then, open a separate terminal and use:
+
+### `npm start`
+
+Congrats, you launched the app!
 
 ## Available Scripts
 
