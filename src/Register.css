@@ -5,7 +5,7 @@
     margin: 0;
     font-family: "Arial", sans-serif;
     height: 100vh;
-    background: linear-gradient(to bottom, #63007c, #6879da, #0a104e); /* Updated Indigo Gradient */
+    background: linear-gradient(to bottom, #64027c, #6879da, #0a104e); /* Updated Indigo Gradient */
     color: white;
     display: flex;
     justify-content: center;
@@ -70,7 +70,7 @@
 
 /* Register Button */
 .register-button {
-    background: #ffffff;
+    background: #a321c3;
     border: none;
     color: white;
     font-size: 1rem;
