@@ -18,7 +18,7 @@ const Calendar = () => {
   const categoryColors = {
     Personal: "#c188d1", // Pastel Pink
     Work: "#61b4e1",     // Pastel Blue
-    Other: "#f8e8c8"     // Pastel Yellow
+    Other: "#cc99ff"     // Pastel Yellow
   };
 
   const handlePrevMonth = () => {
