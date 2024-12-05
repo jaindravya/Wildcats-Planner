@@ -16,8 +16,8 @@ const Calendar = () => {
 
   // Color mapping for each category
   const categoryColors = {
-    Personal: "#f8c8dc", // Pastel Pink
-    Work: "#c8e8f8",     // Pastel Blue
+    Personal: "#c188d1", // Pastel Pink
+    Work: "##89aae2",     // Pastel Blue
     Other: "#f8e8c8"     // Pastel Yellow
   };
 
@@ -68,7 +68,7 @@ const Calendar = () => {
       </header>
 
       <div className="filter-container">
-        <label>Filter by Category: </label>
+      <label style={{ fontFamily: 'cursive' }}>Filter by category: </label>
         <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
           <option value="">All</option>
           <option value="Personal">Personal</option>
@@ -76,7 +76,8 @@ const Calendar = () => {
           <option value="Other">Other</option>
         </select>
 
-        <label>Search Events: </label>
+
+        <label style={{ fontFamily: 'cursive' }}>Search Events: </label>
         <input
           type="text"
           placeholder="Search by event name"

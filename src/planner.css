@@ -1,9 +1,9 @@
 
   
   main {
-    max-width: 800px;
+    max-width: 1000px;
     margin: 20px auto;
-    background: linear-gradient(to bottom, #f7dcff, #bfc9ff, #d2d6ff);
+    background: linear-gradient(to bottom, #f7dcff, #bfc9ff, #969ce4);
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 5px;
@@ -108,6 +108,37 @@
   
   .delete-cross:focus {
     outline: none;
+  }
+
+  /* for filter and search  */
+
+  .filter-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+    gap: 20px; /* Adjust spacing between filter groups */
+  }
+  
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align labels to the left */
+    flex: 1; /* Ensure equal space distribution */
+  }
+  
+  .filter-group label {
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .filter-group select,
+  .filter-group input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
   }
   
   
