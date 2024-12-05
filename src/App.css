@@ -14,7 +14,7 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	background-color: #5a7ac4;
+	background: linear-gradient(to bottom, #e16ebb, #593c92);
 	color: white;
 	padding: 20px;
 	border-radius: 8px;
@@ -30,8 +30,8 @@
 	margin-top: 15px;
 	padding: 10px 20px;
 	font-size: 1rem;
-	color: #5a7ac4;
-	background-color: white;
+	color: #0c1e48;
+	background-color: rgb(137, 169, 255);
 	border: 2px solid white;
 	border-radius: 5px;
 	cursor: pointer;

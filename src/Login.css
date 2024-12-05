@@ -121,11 +121,12 @@
 }
 
 .paw-planner-image {
-    width: 300px; /* Make it small */
+    width: 300px; 
     position: absolute; 
     top: 11.5%; 
-    left: 40%; 
-    transform: translateY(-50%);
+    left: 41%; 
+    transform: translateY(-50%); 
+   
     z-index: 1
 }
 

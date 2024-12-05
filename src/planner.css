@@ -3,10 +3,10 @@
   main {
     max-width: 800px;
     margin: 20px auto;
-    background: #fff;
+    background: linear-gradient(to bottom, #f7dcff, #bfc9ff, #d2d6ff);
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+    padding: 5px;
   }
 
   .title h1 {
@@ -25,16 +25,17 @@
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    
   }
   
   .list th, .list td {
     text-align: left;
     padding: 10px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #ffffff;
   }
   
   .list th {
-    background-color:#5a7ac4;
+    background: linear-gradient(to bottom, #e16ebb, #593c92);
     color:white;
   }
   
