@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './planner.css';
+import confetti from "canvas-confetti";
 
 class Planner extends Component {
   constructor() {
@@ -78,6 +79,13 @@ class Planner extends Component {
         this.setState((prevState) => {
           const updatedTasks = [...prevState.tasks];
           updatedTasks[index].status = updatedStatus;
+          if (updatedStatus === "completed") {
+            confetti({
+              particleCount: 100, // Number of confetti pieces
+              spread: 70, // Angle of spread
+              origin: { y: 0.6 }, // Where confetti starts
+            });
+          }
           return { tasks: updatedTasks };
         });
       }
@@ -166,16 +174,19 @@ class Planner extends Component {
     this.updateDayOfWeek();
     setInterval(this.updateDateTime, 1000);
     setInterval(this.updateDayOfWeek, 1000);
+  
+    // Check for a task passed from Calendar via localStorage
+    const taskToAdd = JSON.parse(localStorage.getItem("taskToAdd"));
+    if (taskToAdd) {
+      this.setState((prevState) => ({
+        tasks: [...prevState.tasks, taskToAdd], // Add the task to the planner's tasks
+      }));
+      localStorage.removeItem("taskToAdd"); // Clear localStorage after adding the task
+    }
   }
+  
+  
 
-/*************  ✨ Codeium Command ⭐  *************/
-  /**
-   * Render the planner component, which displays a table of tasks,
-   * allows filtering by task status, searching for tasks, adding new tasks,
-   * and deleting tasks. Also displays the current date and day of the week.
-   * @returns {ReactElement} The rendered planner component.
-   */
-/******  79f1bf86-e1d1-4720-ab0a-2099116b9f08  *******/
   render() {
     const { currentDateTime, dayOfWeek, tasks, newTaskName, newTaskDate } = this.state;
     const progress = this.calculateProgress();
