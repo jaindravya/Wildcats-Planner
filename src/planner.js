@@ -106,11 +106,26 @@ class Planner extends Component {
     }
   };
 
+  // progress of completed tasks
+  calculateProgress = () => {
+    const { tasks } = this.state;
+  
+    if (tasks.length === 0) {
+      return 0; 
+    }
+  
+    const completedTasks = tasks.filter((task) => task.status === 'completed');
+    return (completedTasks.length / tasks.length) * 100;
+  };
+
   // Get current date and time
   getCurrentDateTime = () => {
     const now = new Date();
     return now.toLocaleString();
   };
+  
+  
+  
 
   updateDateTime = () => {
     const currentDateTime = this.getCurrentDateTime();
@@ -134,8 +149,30 @@ class Planner extends Component {
     setInterval(this.updateDayOfWeek, 1000);
   }
 
+  ProgressBar = ({ progress }) => {
+    return (
+      <div style={{ width: '100%', background: '#ddd', borderRadius: '5px', marginBottom: '20px' }}>
+        <div
+          style={{
+            width: `${progress}%`,
+            background: '#4caf50',
+            height: '20px',
+            borderRadius: '5px',
+            textAlign: 'center',
+            color: 'white',
+            lineHeight: '20px',
+          }}
+        >
+          {progress.toFixed(0)}%
+        </div>
+      </div>
+    );
+  };
+
   render() {
     const { currentDateTime, dayOfWeek, tasks, newTaskName, newTaskDate } = this.state;
+
+    const progress = this.calculateProgress();
 
     return (
       <div className="planner-container">
@@ -151,6 +188,9 @@ class Planner extends Component {
               </span>
             </li>
           </ul>
+
+          
+
           {/* filter/search */}
           <div className="filter-container">
   <div className="filter-group">
@@ -238,6 +278,10 @@ class Planner extends Component {
 
             </table>
           </div>
+
+          {/* Progress Bar */}
+          <this.ProgressBar progress={progress} />
+
           <div className="add-task">
             <input
               type="text"
@@ -254,6 +298,9 @@ class Planner extends Component {
               Add Task
             </button>
           </div>
+
+          
+
         </main>
       </div>
     );
