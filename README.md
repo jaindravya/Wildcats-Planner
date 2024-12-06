@@ -15,7 +15,7 @@ Then install cors using:
 
 Then install animation using:
 
-### npm install canvas-confetti
+### `npm install canvas-confetti`
 
 Go to the backend directory:
 
