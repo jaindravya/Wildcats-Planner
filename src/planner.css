@@ -15,7 +15,13 @@
     margin-bottom: 20px;
   }
   
+  .time {
+    list-style-type: none;
+    padding: 0;
+  }
+
   .time h3 {
+    
     text-align: center;
     margin: 5px 0;
     color: #555;
