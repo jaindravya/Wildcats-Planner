@@ -21,7 +21,7 @@ const Calendar = () => {
     Other: "#88c6f5"     // Pastel blue
   };
 
-  // Fetch events when component mounts
+  // Fetch events and check for selectedDate in localStorage
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -38,8 +38,25 @@ const Calendar = () => {
         console.error("Error fetching events:", error);
       }
     };
+  
     fetchEvents();
+  
+    // checking if the selected date and task name are passed via local storage
+    const savedDate = localStorage.getItem("selectedDate");
+    const savedTaskName = localStorage.getItem("taskName");
+  
+    if (savedDate) {
+      setSelectedDate(savedDate); // setting the selected date 
+      localStorage.removeItem("selectedDate"); // reoving it 
+    }
+  
+    if (savedTaskName) {
+      setNewEvent(savedTaskName); // prefilling the task name into the event 
+      localStorage.removeItem("taskName"); // remove it 
+    }
   }, []);
+  
+
 
   // Add a new event
   const handleAddEvent = async () => {
