@@ -106,6 +106,19 @@ class Planner extends Component {
     }
   };
 
+  // progress of completed tasks
+  calculateProgress = () => {
+    const { tasks } = this.state;
+  
+    if (tasks.length === 0) {
+      return 0; 
+    }
+  
+    const completedTasks = tasks.filter((task) => task.status === 'completed');
+    return (completedTasks.length / tasks.length) * 100;
+  };
+
+
   // Get current date and time
   getCurrentDateTime = () => {
     const now = new Date();
@@ -116,6 +129,27 @@ class Planner extends Component {
     const currentDateTime = this.getCurrentDateTime();
     this.setState({ currentDateTime });
   };
+
+  ProgressBar = ({ progress }) => {
+    return (
+      <div style={{ width: '100%', background: '#ddd', borderRadius: '5px', marginBottom: '20px' }}>
+        <div
+          style={{
+            width: `${progress}%`,
+            background: '#4caf50',
+            height: '20px',
+            borderRadius: '5px',
+            textAlign: 'center',
+            color: 'white',
+            lineHeight: '20px',
+          }}
+        >
+          {progress.toFixed(0)}%
+        </div>
+      </div>
+    );
+  };
+
 
   // Get the current day of the week
   updateDayOfWeek = () => {
@@ -134,8 +168,17 @@ class Planner extends Component {
     setInterval(this.updateDayOfWeek, 1000);
   }
 
+/*************  ✨ Codeium Command ⭐  *************/
+  /**
+   * Render the planner component, which displays a table of tasks,
+   * allows filtering by task status, searching for tasks, adding new tasks,
+   * and deleting tasks. Also displays the current date and day of the week.
+   * @returns {ReactElement} The rendered planner component.
+   */
+/******  79f1bf86-e1d1-4720-ab0a-2099116b9f08  *******/
   render() {
     const { currentDateTime, dayOfWeek, tasks, newTaskName, newTaskDate } = this.state;
+    const progress = this.calculateProgress();
 
     return (
       <div className="planner-container">
@@ -195,10 +238,10 @@ class Planner extends Component {
               <tbody>
   {tasks
     .filter((task) => {
-      const matchesStatus = this.state.filterStatus // NEW: Filter logic
+      const matchesStatus = this.state.filterStatus 
         ? task.status === this.state.filterStatus
         : true;
-      const matchesSearch = task.name // NEW: Search logic
+      const matchesSearch = task.name // search
         .toLowerCase()
         .includes(this.state.searchQuery.toLowerCase());
       return matchesStatus && matchesSearch;
@@ -244,6 +287,8 @@ class Planner extends Component {
 
             </table>
           </div>
+          {/* Progress Bar */}
+          <this.ProgressBar progress={progress} />
           <div className="add-task">
             <input
               type="text"
