@@ -81,9 +81,9 @@ class Planner extends Component {
           updatedTasks[index].status = updatedStatus;
           if (updatedStatus === "completed") {
             confetti({
-              particleCount: 100, // Number of confetti pieces
-              spread: 70, // Angle of spread
-              origin: { y: 0.6 }, // Where confetti starts
+              particleCount: 100, 
+              spread: 200, 
+              origin: { y: 0.6 }, 
             });
           }
           return { tasks: updatedTasks };
@@ -175,13 +175,13 @@ class Planner extends Component {
     setInterval(this.updateDateTime, 1000);
     setInterval(this.updateDayOfWeek, 1000);
   
-    // Check for a task passed from Calendar via localStorage
+    // checking for a task from calendar w local storage
     const taskToAdd = JSON.parse(localStorage.getItem("taskToAdd"));
     if (taskToAdd) {
       this.setState((prevState) => ({
-        tasks: [...prevState.tasks, taskToAdd], // Add the task to the planner's tasks
+        tasks: [...prevState.tasks, taskToAdd], // adding to planner
       }));
-      localStorage.removeItem("taskToAdd"); // Clear localStorage after adding the task
+      localStorage.removeItem("taskToAdd"); // clering local stoarge 
     }
   }
   
