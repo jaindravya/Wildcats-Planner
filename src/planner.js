@@ -224,12 +224,18 @@ class Planner extends Component {
     &times;
   </button>
   <button
-    onClick={() => (window.location.href = '/calendar')}
-    className="push-to-calendar-button"
-    aria-label="Push to Calendar"
-  >
-    Push to Calendar
-  </button>
+  onClick={() => {
+    localStorage.setItem("selectedDate", task.date); // save task date, name to local storage, redirecting to calendar page 
+    localStorage.setItem("taskName", task.name); 
+    window.location.href = "/calendar"; 
+  }}
+  className="push-to-calendar-button"
+  aria-label="Push to Calendar"
+>
+  Push to Calendar
+</button>
+
+
 </td>
 
       </tr>
