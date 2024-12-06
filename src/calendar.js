@@ -25,10 +25,10 @@ const Calendar = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch("http://localhost:5001/events"); // Adjust your API endpoint here
+        const response = await fetch("http://localhost:5001/events"); 
         const data = await response.json();
         const eventsByDate = data.reduce((acc, event) => {
-          const date = event.date.split("T")[0]; // Assuming event date is in ISO string format
+          const date = event.date.split("T")[0]; 
           if (!acc[date]) acc[date] = [];
           acc[date].push(event);
           return acc;
@@ -50,41 +50,59 @@ const Calendar = () => {
   
     const event = {
       name: newEvent,
-      date: selectedDate, // Use the selected date
-      category: newCategory,
+      category: newCategory, // Use the current category state
     };
   
-    try {
-      // 1. Update state optimistically by adding the new event immediately
-      setEvents((prevEvents) => {
-        const updatedEvents = { ...prevEvents };
-        if (!updatedEvents[selectedDate]) {
-          updatedEvents[selectedDate] = [];
-        }
-        updatedEvents[selectedDate].push(event); // Add the new event
-        return updatedEvents;
-      });
+    // Optimistically update the UI
+    setEvents((prevEvents) => {
+      const updatedEvents = { ...prevEvents };
+      if (!updatedEvents[selectedDate]) {
+        updatedEvents[selectedDate] = [];
+      }
+      updatedEvents[selectedDate].push(event);
+      return updatedEvents;
+    });
   
-      // 2. Send the event to the backend (Optional: Only if you want to persist it)
+    try {
+      // Send the event to the backend
       const response = await fetch("http://localhost:5001/events", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(event),
+        body: JSON.stringify({ ...event, date: selectedDate }),
       });
   
-      if (!response.ok) {
+      if (response.ok) {
+        const addedEvent = await response.json();
+  
+        // Sync with backend data to ensure consistency
+        setEvents((prevEvents) => {
+          const updatedEvents = { ...prevEvents };
+          updatedEvents[selectedDate] = updatedEvents[selectedDate].map((e) =>
+            e === event ? addedEvent : e
+          );
+          return updatedEvents;
+        });
+      } else {
         console.error("Error adding event to the server");
       }
-  
-      // 3. Clear input fields
-      setNewEvent("");
-      setNewCategory("Personal");
     } catch (error) {
       console.error("Error adding event:", error);
+  
+      // Roll back the optimistic update if the backend call fails
+      setEvents((prevEvents) => {
+        const updatedEvents = { ...prevEvents };
+        updatedEvents[selectedDate] = updatedEvents[selectedDate].filter((e) => e !== event);
+        return updatedEvents;
+      });
+    } finally {
+      // Clear the inputs after processing is complete
+      setNewEvent("");
+      setNewCategory("Personal"); // Reset after the operation
     }
   };
+  
   
 
   //weekdays
