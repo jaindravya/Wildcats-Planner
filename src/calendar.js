@@ -16,19 +16,19 @@ const Calendar = () => {
 
   // Color mapping for each category
   const categoryColors = {
-    Personal: "#c992d1", // Pastel red
-    Work: "#83c99f",     // Pastel green
-    Other: "#88c6f5"     // Pastel blue
+    Personal: "#c992d1",
+    Work: "#83c99f",
+    Other: "#88c6f5"
   };
 
-  // Fetch events and check for selectedDate in localStorage
+  // Fetch events once on load
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch("http://localhost:5001/events"); 
+        const response = await fetch("http://localhost:5001/events");
         const data = await response.json();
         const eventsByDate = data.reduce((acc, event) => {
-          const date = event.date.split("T")[0]; 
+          const date = event.date.split("T")[0];
           if (!acc[date]) acc[date] = [];
           acc[date].push(event);
           return acc;
@@ -38,67 +38,57 @@ const Calendar = () => {
         console.error("Error fetching events:", error);
       }
     };
-  
+
     fetchEvents();
-  
-    // checking if the selected date and task name are passed via local storage
+
+    // Check if date/task came from localStorage
     const savedDate = localStorage.getItem("selectedDate");
     const savedTaskName = localStorage.getItem("taskName");
-  
+
     if (savedDate) {
-      setSelectedDate(savedDate); // setting the selected date 
-      localStorage.removeItem("selectedDate"); // reoving it 
+      setSelectedDate(savedDate);
+      localStorage.removeItem("selectedDate");
     }
-  
+
     if (savedTaskName) {
-      setNewEvent(savedTaskName); // prefilling the task name into the event 
-      localStorage.removeItem("taskName"); // remove it 
+      setNewEvent(savedTaskName);
+      localStorage.removeItem("taskName");
     }
   }, []);
-  
 
-
-  // Add a new event
   const handleAddEvent = async () => {
     if (!newEvent) {
       alert("Please enter an event name!");
       return;
     }
-  
-    const event = {
+
+    const eventData = {
       name: newEvent,
-      category: newCategory, // Use the current category state
+      category: newCategory,
+      date: selectedDate
     };
-  
-    // Optimistically update the UI
-    setEvents((prevEvents) => {
-      const updatedEvents = { ...prevEvents };
-      if (!updatedEvents[selectedDate]) {
-        updatedEvents[selectedDate] = [];
-      }
-      updatedEvents[selectedDate].push(event);
-      return updatedEvents;
-    });
-  
+
     try {
-      // Send the event to the backend
       const response = await fetch("http://localhost:5001/events", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...event, date: selectedDate }),
+        body: JSON.stringify(eventData),
       });
-  
+
       if (response.ok) {
         const addedEvent = await response.json();
-  
-        // Sync with backend data to ensure consistency
+        // Ensure no duplicates by checking _id
         setEvents((prevEvents) => {
           const updatedEvents = { ...prevEvents };
-          updatedEvents[selectedDate] = updatedEvents[selectedDate].map((e) =>
-            e === event ? addedEvent : e
-          );
+          if (!updatedEvents[selectedDate]) {
+            updatedEvents[selectedDate] = [];
+          }
+          const exists = updatedEvents[selectedDate].some(e => e._id === addedEvent._id);
+          if (!exists) {
+            updatedEvents[selectedDate].push(addedEvent);
+          }
           return updatedEvents;
         });
       } else {
@@ -106,23 +96,12 @@ const Calendar = () => {
       }
     } catch (error) {
       console.error("Error adding event:", error);
-  
-      // Roll back the optimistic update if the backend call fails
-      setEvents((prevEvents) => {
-        const updatedEvents = { ...prevEvents };
-        updatedEvents[selectedDate] = updatedEvents[selectedDate].filter((e) => e !== event);
-        return updatedEvents;
-      });
     } finally {
-      // Clear the inputs after processing is complete
       setNewEvent("");
-      setNewCategory("Personal"); // Reset after the operation
+      setNewCategory("Personal");
     }
   };
-  
-  
 
-  //weekdays
   const getWeekdays = (date_string) => {
     const weekdaysSunday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const weekdaysMonday = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -133,30 +112,15 @@ const Calendar = () => {
     const weekdaysSaturday = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
     const match_date = date_string.toLocaleDateString('en-US', { weekday: 'long' });
 
-    if (match_date === weekdaysSunday[0]) {
-      return weekdaysSunday;
-    }
-    if (match_date === weekdaysMonday[0]) {
-      return weekdaysMonday;
-    }
-    if (match_date === weekdaysTuesday[0]) {
-      return weekdaysTuesday;
-    }
-    if (match_date === weekdaysWednesday[0]) {
-      return weekdaysWednesday;
-    }
-    if (match_date === weekdaysThursday[0]) {
-      return weekdaysThursday;
-    }
-    if (match_date === weekdaysFriday[0]) {
-      return weekdaysFriday;
-    }
-    if (match_date === weekdaysSaturday[0]) {
-      return weekdaysSaturday;
-    }
+    if (match_date === 'Sunday') return weekdaysSunday;
+    if (match_date === 'Monday') return weekdaysMonday;
+    if (match_date === 'Tuesday') return weekdaysTuesday;
+    if (match_date === 'Wednesday') return weekdaysWednesday;
+    if (match_date === 'Thursday') return weekdaysThursday;
+    if (match_date === 'Friday') return weekdaysFriday;
+    if (match_date === 'Saturday') return weekdaysSaturday;
   };
-  
-  // Delete an event
+
   const handleDeleteEvent = async (eventIndex) => {
     const event = events[selectedDate][eventIndex];
     try {
@@ -167,7 +131,7 @@ const Calendar = () => {
         setEvents((prevEvents) => {
           const updatedEvents = { ...prevEvents };
           updatedEvents[selectedDate] = updatedEvents[selectedDate].filter(
-            (_, index) => index !== eventIndex
+              (_, index) => index !== eventIndex
           );
           return updatedEvents;
         });
@@ -177,7 +141,6 @@ const Calendar = () => {
     }
   };
 
-  // Filter events based on category and search query
   const filteredEvents = (date) => {
     const eventList = events[date] || [];
     return eventList.filter((event) => {
@@ -187,99 +150,98 @@ const Calendar = () => {
     });
   };
 
-
   return (
-    <div className="calendar-container">
-      <header className="calendar-header">
-        <button onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1))}>{"<"}</button>
-        <h2>{currentDate.toLocaleString("default", { month: "long" })} {currentDate.getFullYear()}</h2>
-        <button onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1))}>{">"}</button>
-      </header>
+      <div className="calendar-container">
+        <header className="calendar-header">
+          <button onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1))}>{"<"}</button>
+          <h2>{currentDate.toLocaleString("default", { month: "long" })} {currentDate.getFullYear()}</h2>
+          <button onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1))}>{">"}</button>
+        </header>
 
-      <div className="filter-container">
-        <label style={{ fontFamily: 'cursive' }}>Filter by category: </label>
-        <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
-          <option value="">All</option>
-          <option value="Personal">Personal</option>
-          <option value="Work">Work</option>
-          <option value="Other">Other</option>
-        </select>
-
-        <label style={{ fontFamily: 'cursive' }}>Search Events: </label>
-        <input
-          type="text"
-          placeholder="Search by event name"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-      </div>
-
-      <div className="weekdays">
-        {getWeekdays(new Date(currentDate.getFullYear(), currentDate.getMonth(), 1)).map((day, index) => (
-          <span className="weekday" key={index}>
-            {day}
-          </span>
-        ))}
-      </div>
-
-      <div className="calendar-grid">
-        {daysInMonth.map((day) => {
-          const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day).toISOString().split("T")[0];
-          return (
-            <div
-              key={day}
-              className={`calendar-day ${selectedDate === date ? "selected" : ""}`}
-              onClick={() => setSelectedDate(date)}
-            >
-              <span>{day}</span>
-              {filteredEvents(date).length > 0 && (
-                <ul className="event-list">
-                  {filteredEvents(date).map((event, index) => (
-                    <li
-                      key={index}
-                      style={{ backgroundColor: categoryColors[event.category] }}
-                    >
-                      {event.name}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          );
-        })}
-      </div>
-
-      {selectedDate && (
-        <div className="event-form">
-          <h3>Events for {selectedDate}</h3>
-          <ul>
-            {filteredEvents(selectedDate).map((event, index) => (
-              <li
-                key={index}
-                style={{ backgroundColor: categoryColors[event.category] }}
-              >
-                {event.name} <span className="category">({event.category})</span>
-                <button className="delete-btn" onClick={() => handleDeleteEvent(index)}>
-                  ✖
-                </button>
-              </li>
-            ))}
-          </ul>
-          <input
-            type="text"
-            placeholder="Add new event"
-            value={newEvent}
-            onChange={(e) => setNewEvent(e.target.value)}
-          />
-          <select value={newCategory} onChange={(e) => setNewCategory(e.target.value)}>
+        <div className="filter-container">
+          <label style={{ fontFamily: 'cursive' }}>Filter by category: </label>
+          <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
+            <option value="">All</option>
             <option value="Personal">Personal</option>
             <option value="Work">Work</option>
             <option value="Other">Other</option>
           </select>
-          <button onClick={handleAddEvent}>Add Event</button>
+
+          <label style={{ fontFamily: 'cursive' }}>Search Events: </label>
+          <input
+              type="text"
+              placeholder="Search by event name"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
-      )}
-    </div>
+
+        <div className="weekdays">
+          {getWeekdays(new Date(currentDate.getFullYear(), currentDate.getMonth(), 1)).map((day, index) => (
+              <span className="weekday" key={day}>
+            {day}
+          </span>
+          ))}
+        </div>
+
+        <div className="calendar-grid">
+          {daysInMonth.map((day) => {
+            const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day).toISOString().split("T")[0];
+            return (
+                <div
+                    key={date}
+                    className={`calendar-day ${selectedDate === date ? "selected" : ""}`}
+                    onClick={() => setSelectedDate(date)}
+                >
+                  <span>{day}</span>
+                  {filteredEvents(date).length > 0 && (
+                      <ul className="event-list">
+                        {filteredEvents(date).map((event) => (
+                            <li
+                                key={event._id} // Use _id as the key instead of index
+                                style={{ backgroundColor: categoryColors[event.category] }}
+                            >
+                              {event.name}
+                            </li>
+                        ))}
+                      </ul>
+                  )}
+                </div>
+            );
+          })}
+        </div>
+
+        {selectedDate && (
+            <div className="event-form">
+              <h3>Events for {selectedDate}</h3>
+              <ul>
+                {filteredEvents(selectedDate).map((event, index) => (
+                    <li
+                        key={event._id}
+                        style={{ backgroundColor: categoryColors[event.category] }}
+                    >
+                      {event.name} <span className="category">({event.category})</span>
+                      <button className="delete-btn" onClick={() => handleDeleteEvent(index)}>
+                        ✖
+                      </button>
+                    </li>
+                ))}
+              </ul>
+              <input
+                  type="text"
+                  placeholder="Add new event"
+                  value={newEvent}
+                  onChange={(e) => setNewEvent(e.target.value)}
+              />
+              <select value={newCategory} onChange={(e) => setNewCategory(e.target.value)}>
+                <option value="Personal">Personal</option>
+                <option value="Work">Work</option>
+                <option value="Other">Other</option>
+              </select>
+              <button onClick={handleAddEvent}>Add Event</button>
+            </div>
+        )}
+      </div>
   );
 };
 
