@@ -216,14 +216,22 @@ class Planner extends Component {
           </button>
         </td>
         <td>
-          <button
-            onClick={() => this.deleteTask(index)}
-            className="delete-cross"
-            aria-label="Delete Task"
-          >
-            &times;
-          </button>
-        </td>
+  <button
+    onClick={() => this.deleteTask(index)}
+    className="delete-cross"
+    aria-label="Delete Task"
+  >
+    &times;
+  </button>
+  <button
+    onClick={() => (window.location.href = '/calendar')}
+    className="push-to-calendar-button"
+    aria-label="Push to Calendar"
+  >
+    Push to Calendar
+  </button>
+</td>
+
       </tr>
     ))}
 </tbody>

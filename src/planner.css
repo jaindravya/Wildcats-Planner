@@ -141,4 +141,16 @@
     box-sizing: border-box;
   }
   
+  .push-to-calendar-button { /*pushing to calendar*/
+    margin-left: 13px;
+    margin-right: 10px;
+    background: linear-gradient(to bottom, #64027c, #414dc8);
+    font-family: cursive;
+    color: white;
+    border: none;
+    padding: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
   
