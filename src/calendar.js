@@ -16,9 +16,9 @@ const Calendar = () => {
 
   // Color mapping for each category
   const categoryColors = {
-    Personal: "#ffb3ba", // Pastel red
-    Work: "#baffc9",     // Pastel green
-    Other: "#bae1ff"     // Pastel blue
+    Personal: "#c992d1", // Pastel red
+    Work: "#83c99f",     // Pastel green
+    Other: "#88c6f5"     // Pastel blue
   };
 
   // Fetch events when component mounts
